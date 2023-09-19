@@ -6,6 +6,8 @@ export default {
       colors: {
         main: "#0D1117",
         column: "#161C22",
+        primary: "#0D1117",
+        secondary: "#161C22",
       },
     },
   },
