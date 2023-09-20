@@ -1,0 +1,7 @@
+# REF : https://pebblepark.tistory.com/22
+FROM nginx:latest
+WORKDIR /app
+COPY ./dist ./dist
+COPY ./default.conf /etc/nginx/conf.d
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
