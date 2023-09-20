@@ -1,4 +1,4 @@
-import KanbanBoard from "./components/v2/KanbanBoard";
+import KanbanBoard from "./components/origin/KanbanBoard.tsx";
 import "./App.css";
 
 function App() {

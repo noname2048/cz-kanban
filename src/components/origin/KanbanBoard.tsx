@@ -1,19 +1,19 @@
-import ColumnContainer from "@/components/v2/ColumnContainer.tsx";
-import TaskCard from "@/components/v2/TaskCard.tsx";
+import ColumnContainer from "@/components/origin/ColumnContainer.tsx";
+import TaskCard from "@/components/origin/TaskCard.tsx";
 import PlusIcon from "@/icons/PlusIcon.tsx";
 import { Column, Id, Task } from "@/types.ts";
-import { useMemo, useState } from "react";
 import {
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
   DragStartEvent,
-  useSensors,
-  useSensor,
   PointerSensor,
-  DragOverEvent,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 function KanbanBoard() {
@@ -59,7 +59,7 @@ function KanbanBoard() {
           </div>
           <button
             onClick={createNewColumn}
-            className=" bg-primary border-secondary flex h-[60px] w-[350px] min-w-[350px] cursor-pointer gap-2 rounded-lg border-2 p-4 ring-rose-500 hover:ring-2"
+            className=" flex h-[60px] w-[350px] min-w-[350px] cursor-pointer gap-2 rounded-lg border-2 border-secondary bg-primary p-4 ring-rose-500 hover:ring-2"
           >
             <PlusIcon />
             Add Column

@@ -1,4 +1,4 @@
-import TaskCard from "@/components/v2/TaskCard.tsx";
+import TaskCard from "@/components/origin/TaskCard.tsx";
 import PlusIcon from "@/icons/PlusIcon.tsx";
 import TrashIcon from "@/icons/TrashIcon.tsx";
 import { Column, Id, Task } from "@/types.ts";
@@ -79,7 +79,7 @@ function ColumnContainer(props: Props) {
         className="flex h-[60px] cursor-grab items-center justify-between rounded-md rounded-b-none border-4 border-column bg-main p-3 text-base font-bold"
       >
         <div className="flex gap-2">
-          <div className="bg-secondary flex items-center justify-center rounded-full px-2 py-1 text-sm">
+          <div className="flex items-center justify-center rounded-full bg-secondary px-2 py-1 text-sm">
             0
           </div>
           {!editMode && column.title}
@@ -130,7 +130,7 @@ function ColumnContainer(props: Props) {
         onClick={() => {
           createTask(column.id);
         }}
-        className="border-secondary border-x-secondary flex items-center gap-2 rounded-md border-2 p-4 hover:bg-main hover:text-rose-500 active:bg-black"
+        className="flex items-center gap-2 rounded-md border-2 border-secondary border-x-secondary p-4 hover:bg-main hover:text-rose-500 active:bg-black"
       >
         <PlusIcon />
         Add task
