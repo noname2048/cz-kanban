@@ -1,15 +1,25 @@
+import TaskCard from "@/components/v2/TaskCard.tsx";
+import PlusIcon from "@/icons/PlusIcon.tsx";
 import TrashIcon from "@/icons/TrashIcon.tsx";
-import { Column, Id } from "@/types.ts";
+import { Column, Id, Task } from "@/types.ts";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 
 interface Props {
   column: Column;
   deleteColumn: (id: Id) => void;
+  updateColumn: (id: Id, title: string) => void;
+
+  createTask: (columnId: Id) => void;
+  deleteTask: (id: Id) => void;
+  tasks: Task[];
 }
 
 function ColumnContainer(props: Props) {
-  const { column, deleteColumn } = props;
+  const { column, deleteColumn, updateColumn, createTask, tasks, deleteTask } =
+    props;
+  const [editMode, setEditMode] = useState(false);
 
   const {
     setNodeRef,
@@ -24,6 +34,7 @@ function ColumnContainer(props: Props) {
       type: "Column",
       column,
     },
+    disabled: editMode,
   });
 
   const style = {
@@ -52,12 +63,33 @@ function ColumnContainer(props: Props) {
       className="flex h-[500px] max-h-[500px] w-[350px] flex-col rounded-md bg-main"
     >
       {/* Column title */}
-      <div className="flex h-[60px] cursor-grab items-center justify-between rounded-md rounded-b-none border-4 border-column bg-main p-3 text-base font-bold">
+      <div
+        onClick={() => setEditMode(true)}
+        className="flex h-[60px] cursor-grab items-center justify-between rounded-md rounded-b-none border-4 border-column bg-main p-3 text-base font-bold"
+      >
         <div className="flex gap-2">
           <div className="bg-secondary flex items-center justify-center rounded-full px-2 py-1 text-sm">
             0
           </div>
-          {column.title}
+          {!editMode && column.title}
+          {editMode && (
+            <input
+              className="roudned border-2 bg-black px-2 outline-none focus:border-rose-500"
+              value={column.title}
+              onChange={(e) => {
+                updateColumn(column.id, e.target.value);
+              }}
+              autoFocus
+              onBlur={() => {
+                setEditMode(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setEditMode(false);
+                }
+              }}
+            />
+          )}
         </div>
         <button
           onClick={() => {
@@ -70,9 +102,21 @@ function ColumnContainer(props: Props) {
       </div>
 
       {/* Column task container */}
-      <div className="flex flex-grow">Content</div>
+      <div className="flex flex-grow flex-col gap-4 overflow-y-auto overflow-x-hidden p-2">
+        {tasks.map((task) => (
+          <TaskCard key={task.id} task={task} deleteTask={deleteTask} />
+        ))}
+      </div>
       {/* Column footer */}
-      <div>Footer</div>
+      <button
+        onClick={() => {
+          createTask(column.id);
+        }}
+        className="border-secondary border-x-secondary flex items-center gap-2 rounded-md border-2 p-4 hover:bg-main hover:text-rose-500 active:bg-black"
+      >
+        <PlusIcon />
+        Add task
+      </button>
     </div>
   );
 }

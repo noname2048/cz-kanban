@@ -1,6 +1,6 @@
 import ColumnContainer from "@/components/v2/ColumnContainer.tsx";
 import PlusIcon from "@/icons/PlusIcon.tsx";
-import { Column, Id } from "@/types.ts";
+import { Column, Id, Task } from "@/types.ts";
 import { useMemo, useState } from "react";
 import {
   DndContext,
@@ -18,6 +18,7 @@ function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>([]);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
   const sensors = useSensors(
@@ -43,6 +44,10 @@ function KanbanBoard() {
                   key={col.id}
                   column={col}
                   deleteColumn={deleteColumn}
+                  updateColumn={updateColumn}
+                  createTask={createTask}
+                  deleteTask={deleteTask}
+                  tasks={tasks.filter((tasks) => tasks.columnId === col.id)}
                 />
               ))}
             </SortableContext>
@@ -61,6 +66,12 @@ function KanbanBoard() {
               <ColumnContainer
                 column={activeColumn}
                 deleteColumn={deleteColumn}
+                updateColumn={updateColumn}
+                createTask={createTask}
+                deleteTask={deleteTask}
+                tasks={tasks.filter(
+                  (tasks) => tasks.columnId === activeColumn.id,
+                )}
               />
             )}
           </DragOverlay>,
@@ -109,6 +120,25 @@ function KanbanBoard() {
       );
       return arrayMove(columns, activeColumnIndex, overColumnIndex);
     });
+  }
+  function updateColumn(id: Id, title: string) {
+    const newColumns = columns.map((col) => {
+      if (col.id !== id) return col;
+      return { ...col, title };
+    });
+    setColumns(newColumns);
+  }
+  function createTask(columnId: Id) {
+    const newTask: Task = {
+      id: generateId(),
+      columnId,
+      content: `Task ${tasks.length + 1}`,
+    };
+    setTasks([...tasks, newTask]);
+  }
+  function deleteTask(id: Id) {
+    const newTasks = tasks.filter((task) => task.id !== id);
+    setTasks(newTasks);
   }
 }
 
