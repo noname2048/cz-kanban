@@ -5,22 +5,50 @@ import { useState } from "react";
 interface Props {
   task: Task;
   deleteTask: (id: Id) => void;
+  updateTask: (id: Id, content: string) => void;
 }
 
-function TaskCard({ task, deleteTask }: Props) {
+function TaskCard({ task, deleteTask, updateTask }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
+
+  const toggleEditMode = () => {
+    setEditMode((prev) => !prev);
+    setMouseIsOver(false);
+  };
+
+  if (editMode) {
+    return (
+      <div className="bg-primary relative flex h-[100px] min-h-[100px] cursor-grab items-center rounded-xl p-2.5 text-left hover:ring-2 hover:ring-inset hover:ring-rose-500">
+        <textarea
+          className="h-[90%] w-full resize-none rounded border-none bg-transparent text-white focus:outline-none"
+          value={task.content}
+          autoFocus
+          placeholder="Task content here"
+          onBlur={toggleEditMode}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && e.shiftKey) toggleEditMode();
+          }}
+          onChange={(e) => updateTask(task.id, e.target.value)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div
+      onClick={toggleEditMode}
       onMouseEnter={() => {
         setMouseIsOver(true);
       }}
       onMouseLeave={() => {
         setMouseIsOver(false);
       }}
-      className="bg-primary relative flex h-[100px] min-h-[100px] cursor-grab items-center rounded-xl p-2.5 text-left hover:ring-2 hover:ring-inset hover:ring-rose-500"
+      className="bg-primary task relative flex h-[100px] min-h-[100px] cursor-grab items-center rounded-xl p-2.5 text-left hover:ring-2 hover:ring-inset hover:ring-rose-500"
     >
-      {task.content}
+      <p className="m-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+        {task.content}
+      </p>
       {mouseIsOver && (
         <button
           onClick={() => {
