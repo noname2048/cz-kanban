@@ -1,5 +1,5 @@
-import ColumnContainer from "@/components/ColumnContainer.tsx";
-import TaskCard from "@/components/TaskCard.tsx";
+import ColumnContainer from "@/components/origin/ColumnContainer.tsx";
+import TaskCard from "@/components/origin/TaskCard.tsx";
 import PlusIcon from "@/icons/PlusIcon.tsx";
 import { Column, Id, Task } from "@/types.ts";
 import {

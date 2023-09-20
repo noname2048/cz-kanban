@@ -1,4 +1,4 @@
-import TaskCard from "@/components/TaskCard.tsx";
+import TaskCard from "@/components/origin/TaskCard.tsx";
 import PlusIcon from "@/icons/PlusIcon.tsx";
 import TrashIcon from "@/icons/TrashIcon.tsx";
 import { Column, Id, Task } from "@/types.ts";
