@@ -1,8 +1,8 @@
 import TrashIcon from "@/icons/TrashIcon.tsx";
 import { Id, Task } from "@/types.ts";
 import { useSortable } from "@dnd-kit/sortable";
-import { useState } from "react";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 
 interface Props {
   task: Task;
