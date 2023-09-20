@@ -44,13 +44,15 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/noname2048/cz:latest
+          cache-from: type=gha
+          cache-to: type=gha
 
       ### Deploy ###
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
 
       - name: Set up kubeconfig
-        uses: azure/aks-set-context@v3
+        uses: azure/k8s-set-context@v3
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBECONFIG }}
