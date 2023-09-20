@@ -2,9 +2,9 @@ import TaskCard from "@/components/v2/TaskCard.tsx";
 import PlusIcon from "@/icons/PlusIcon.tsx";
 import TrashIcon from "@/icons/TrashIcon.tsx";
 import { Column, Id, Task } from "@/types.ts";
-import { useSortable } from "@dnd-kit/sortable";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 interface Props {
   column: Column;
@@ -27,6 +27,9 @@ function ColumnContainer(props: Props) {
     updateTask,
     deleteTask,
   } = props;
+
+  const taskIds = useMemo<Id[]>(() => tasks.map((task) => task.id), [tasks]);
+
   const [editMode, setEditMode] = useState(false);
 
   const {
@@ -111,14 +114,16 @@ function ColumnContainer(props: Props) {
 
       {/* Column task container */}
       <div className="flex flex-grow flex-col gap-4 overflow-y-auto overflow-x-hidden p-2">
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            deleteTask={deleteTask}
-            updateTask={updateTask}
-          />
-        ))}
+        <SortableContext items={taskIds}>
+          {tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              deleteTask={deleteTask}
+              updateTask={updateTask}
+            />
+          ))}
+        </SortableContext>
       </div>
       {/* Column footer */}
       <button
