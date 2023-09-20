@@ -1,0 +1,58 @@
+name: cd-workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  main-job:
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+
+    steps:
+      ### Build TS ###
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      ### Build Docker ###
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: noname2048
+          password: ${{ secrets.PAT }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/noname2048/cz:latest
+
+      ### Deploy ###
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Set up kubeconfig
+        uses: azure/aks-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: Rollout
+        run: |
+          kubectl rollout restart deployment/cz-deployment -n cz
