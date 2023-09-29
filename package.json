@@ -13,9 +13,14 @@
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/sortable": "^7.0.2",
     "@dnd-kit/utilities": "^3.2.1",
+    "@reduxjs/toolkit": "^1.9.6",
     "clsx": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.1.2",
+    "react-router-dom": "^6.16.0",
+    "redux-saga": "^1.2.3",
+    "store2": "^2.14.2",
     "tailwind-merge": "^1.14.0"
   },
   "devDependencies": {
