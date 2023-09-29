@@ -2,6 +2,7 @@ import ColumnContainer from "@/components/origin/ColumnContainer.tsx";
 import TaskCard from "@/components/origin/TaskCard.tsx";
 import PlusIcon from "@/icons/PlusIcon.tsx";
 import { Column, Id, Task } from "@/types.ts";
+import { Todo } from "@/types/todo.ts";
 import {
   DndContext,
   DragEndEvent,
@@ -15,12 +16,23 @@ import {
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
+import { useAppSelector } from "@/redux/hook.ts";
+import { useAppDispatch } from "@/redux/hook.ts";
+import {
+  addTodo,
+  removeTodo,
+  updateTodo,
+  overTodo,
+  overColumnTodo,
+} from "@/redux/todo/todoSlice.ts";
 
-function KanbanBoard() {
+function StateKanbanBoard() {
   const [columns, setColumns] = useState<Column[]>([]);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const todoState = useAppSelector((state) => state.todo);
+  const dispatch = useAppDispatch();
+
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
@@ -52,7 +64,7 @@ function KanbanBoard() {
                   createTask={createTask}
                   deleteTask={deleteTask}
                   updateTask={updateTask}
-                  tasks={tasks.filter((tasks) => tasks.columnId === col.id)}
+                  tasks={todoState.filter((tasks) => tasks.columnId === col.id)}
                 />
               ))}
             </SortableContext>
@@ -75,7 +87,7 @@ function KanbanBoard() {
                 createTask={createTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
-                tasks={tasks.filter(
+                tasks={todoState.filter(
                   (tasks) => tasks.columnId === activeColumn.id,
                 )}
               />
@@ -107,7 +119,7 @@ function KanbanBoard() {
   function deleteColumn(id: Id) {
     const filteredColumns = columns.filter((col) => col.id !== id);
     setColumns(filteredColumns);
-    setTasks((prev) => prev.filter((task) => task.columnId !== id));
+    dispatch(removeTodo(id));
   }
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === "Column") {
@@ -146,23 +158,22 @@ function KanbanBoard() {
     setColumns(newColumns);
   }
   function createTask(columnId: Id) {
-    const newTask: Task = {
+    const newTask: Todo = {
       id: generateId(),
       columnId,
-      content: `Task ${tasks.length + 1}`,
+      content: `Task ${todoState.length + 1}`,
     };
-    setTasks([...tasks, newTask]);
+    dispatch(addTodo(newTask));
   }
   function deleteTask(id: Id) {
-    const newTasks = tasks.filter((task) => task.id !== id);
-    setTasks(newTasks);
+    dispatch(removeTodo(id));
   }
   function updateTask(id: Id, content: string) {
-    const newTasks = tasks.map((task) => {
-      if (task.id !== id) return task;
-      return { ...task, content };
-    });
-    setTasks(newTasks);
+    const task = todoState.find((task) => task.id === id);
+    if (task) {
+      const taskUpdate: Todo = { ...task, content };
+      dispatch(updateTodo(taskUpdate));
+    }
   }
   function onDragOver(event: DragOverEvent) {
     console.log("DRAG OVER", event);
@@ -182,24 +193,24 @@ function KanbanBoard() {
 
     // Dropping a Task over another Task
     if (isActiveTask && isOverAtTask) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((task) => task.id === activeId);
-        const overIndex = tasks.findIndex((task) => task.id === overId);
-        tasks[activeIndex].columnId = tasks[overIndex].columnId;
-        return arrayMove(tasks, activeIndex, overIndex);
-      });
+      const activeIndex = todoState.findIndex((task) => task.id === activeId);
+      const overIndex = todoState.findIndex((task) => task.id === overId);
+      dispatch(overTodo({ activeIndex, overIndex }));
     }
 
     const isOverAtColumn = over.data.current?.type === "Column";
     // Dropping a Task over a Column
     if (isActiveTask && isOverAtColumn) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((task) => task.id === activeId);
-        tasks[activeIndex].columnId = overId;
-        return arrayMove(tasks, activeIndex, activeIndex);
-      });
+      const activeIndex = todoState.findIndex((task) => task.id === activeId);
+      const columnId = over.data.current?.column.id;
+      dispatch(overColumnTodo({ columnId, activeIndex }));
+      // setTasks((tasks) => {
+      //   const activeIndex = tasks.findIndex((task) => task.id === activeId);
+      //   tasks[activeIndex].columnId = overId;
+      //   return arrayMove(tasks, activeIndex, activeIndex);
+      // });
     }
   }
 }
 
-export default KanbanBoard;
+export default StateKanbanBoard;
