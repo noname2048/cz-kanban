@@ -5,3 +5,8 @@ export type Todo = {
   columnId: Id;
   content: string;
 };
+
+export type Column = {
+  id: Id;
+  title: string;
+};
