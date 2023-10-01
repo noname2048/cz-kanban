@@ -1,9 +1,12 @@
+import { ClassValue } from "clsx";
 import { ReactNode } from "react";
+import { cn } from "@/libs/cn.ts";
 
 type Props = {
-  children: ReactNode;
+  className?: ClassValue;
+  children?: ReactNode;
 };
 
-export default ({ children }: Props) => {
-  return <div>{children}</div>;
+export default ({ className, children }: Props) => {
+  return <div className={cn(className)}>{children}</div>;
 };

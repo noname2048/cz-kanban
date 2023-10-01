@@ -1,4 +1,5 @@
 import Container from "@/components/mobx/Leo/Container.tsx";
+import AppContainer from "@/components/mobx/movie-rate/AppContainer.tsx";
 import StateKanbanBoard from "@/components/store/StateKanbanBoard.tsx";
 import { store } from "@/redux/store.ts";
 import { Provider } from "react-redux";
@@ -7,15 +8,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import KanbanBoard from "./components/origin/KanbanBoard.tsx";
 import MobxKanbanBoard from "./components/mobx/KanbanBoard.tsx";
+import MovieApp from "@/components/mobx/movie-rate/screen/MovieApp";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <KanbanBoard />,
+    element: <StateKanbanBoard />,
   },
   {
-    path: "/state",
-    element: <StateKanbanBoard />,
+    path: "/no-state",
+    element: <KanbanBoard />,
   },
   {
     path: "/mobx",
@@ -25,12 +27,20 @@ const router = createBrowserRouter([
     path: "/roster",
     element: <Container />,
   },
+  {
+    path: "/movie",
+    element: (
+      <AppContainer>
+        <MovieApp />
+      </AppContainer>
+    ),
+  },
 ]);
 
 function App() {
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </Provider>
   );
 }
