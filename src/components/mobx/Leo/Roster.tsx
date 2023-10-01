@@ -1,11 +1,10 @@
-import Athlete from "@/components/mobx/Leo/Athlete.ts";
+import { useTeamStore } from "@/components/mobx/Leo/TermStore.tsx";
 import TradeForm from "@/components/mobx/Leo/TradeForm.tsx";
 import { observer } from "mobx-react";
 
-const lebronJames = new Athlete("lebron James", 37);
-const stephCurry = new Athlete("Steph Curry", 34);
-
 const Roster = observer(() => {
+  const { players } = useTeamStore();
+
   return (
     <table>
       <thead>
@@ -15,10 +14,11 @@ const Roster = observer(() => {
           <th className="border p-2 text-left">Teams</th>
           <th className="border p-2 text-left">Trade Form</th>
           <th className="border p-2 text-left">Is it their birthday?</th>
+          <th className="border p-2 text-left">Salary</th>
         </tr>
       </thead>
       <tbody>
-        {[lebronJames, stephCurry].map((athlete) => {
+        {players.map((athlete) => {
           return (
             <tr key={athlete.name}>
               <td className="border p-2 text-left">{athlete.name}</td>
@@ -36,6 +36,7 @@ const Roster = observer(() => {
                   Wish happy birthday 🎉
                 </button>
               </td>
+              <td className="border p-2 text-left">{athlete.salary}</td>
             </tr>
           );
         })}
