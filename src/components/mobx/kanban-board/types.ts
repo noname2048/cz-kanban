@@ -10,3 +10,8 @@ export type Column = {
   id: Id;
   title: string;
 };
+
+export type KanbanBoard = {
+  todos: Todo[];
+  columns: Column[];
+};
