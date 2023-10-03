@@ -1,31 +1,20 @@
-import { makeObservable, observable, action } from "mobx";
+import { Store } from "@/components/mobx/scratch/Store.ts";
+import {
+  StoreContext,
+  useStore,
+} from "@/components/mobx/scratch/StoreContext.ts";
 import { observer } from "mobx-react";
-import { createContext, useContext } from "react";
-
-class Monitor {
-  width: number;
-  height: number;
-  constructor() {
-    this.width = 1920;
-    this.height = 1080;
-    makeObservable(this, {
-      width: observable,
-      height: observable,
-      setWidth: action,
-      setHeight: action,
-    });
-  }
-  setWidth(width: number) {
-    this.width = width;
-  }
-  setHeight(height: number) {
-    this.height = height;
-  }
-}
-
-const monitor = new Monitor();
 
 const SimpleState = observer(() => {
+  return (
+    <StoreContext.Provider value={new Store()}>
+      <SimpleStateView />
+    </StoreContext.Provider>
+  );
+});
+
+const SimpleStateView = observer(() => {
+  const { monitor, mouse } = useStore();
   return (
     <div className="flex flex-col gap-5">
       <div className="rounded border border-white p-2">
@@ -55,6 +44,15 @@ const SimpleState = observer(() => {
           if (e.key === "Enter") {
             e.currentTarget.blur();
           }
+        }}
+      />
+      <div className="rounded border border-white p-2">dpi: {mouse.dpi}</div>
+      <input
+        value={mouse.dpi}
+        className="rounded border border-white p-2 text-black"
+        onChange={(e) => {
+          const val = Number(e.target.value);
+          if (!Number.isNaN(val)) mouse.setDpi(val);
         }}
       />
     </div>
