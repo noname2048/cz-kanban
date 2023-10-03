@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./App.css";
 import KanbanBoard from "./components/origin/KanbanBoard.tsx";
-import MobxKanbanBoard from "@/components/mobx/kanban-board/components/KanbanBoard.tsx";
+import MobxKanbanBoard from "@/components/mobx/kanban-board/components-dev/KanbanBoard.tsx";
 import MovieApp from "@/components/mobx/movie-rate/screen/MovieApp";
 
 const router = createBrowserRouter([

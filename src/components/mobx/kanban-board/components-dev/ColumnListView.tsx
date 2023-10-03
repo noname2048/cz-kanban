@@ -1,4 +1,4 @@
-import ColumnView from "@/components/mobx/kanban-board/components/ColumnView.tsx";
+import ColumnView from "@/components/mobx/kanban-board/components-dev/ColumnView.tsx";
 import { useKanban } from "@/components/mobx/kanban-board/context/KanbanContext.ts";
 import PlusIcon from "@/icons/PlusIcon.tsx";
 import { SortableContext } from "@dnd-kit/sortable";

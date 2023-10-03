@@ -1,6 +1,6 @@
-import ColumnBackground from "@/components/mobx/kanban-board/components/ColumnBackground.tsx";
-import ColumnTitleView from "@/components/mobx/kanban-board/components/ColumnTitleView.tsx";
-import TodoView from "@/components/mobx/kanban-board/components/TodoView.tsx";
+import ColumnBackground from "@/components/mobx/kanban-board/components-dev/ColumnBackground.tsx";
+import ColumnTitleView from "@/components/mobx/kanban-board/components-dev/ColumnTitleView.tsx";
+import TodoView from "@/components/mobx/kanban-board/components-dev/TodoView.tsx";
 import { useKanban } from "@/components/mobx/kanban-board/context/KanbanContext.ts";
 import PlusIcon from "@/icons/PlusIcon.tsx";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";

@@ -1,7 +1,7 @@
 import { Kanban } from "@/components/mobx/kanban-board/class/Kanban.ts";
-import ColumnListView from "@/components/mobx/kanban-board/components/ColumnListView.tsx";
-import ColumnView from "@/components/mobx/kanban-board/components/ColumnView.tsx";
-import TodoView from "@/components/mobx/kanban-board/components/TodoView.tsx";
+import ColumnListView from "@/components/mobx/kanban-board/components-dev/ColumnListView.tsx";
+import ColumnView from "@/components/mobx/kanban-board/components-dev/ColumnView.tsx";
+import TodoView from "@/components/mobx/kanban-board/components-dev/TodoView.tsx";
 import {
   KanbanContext,
   useKanban,
