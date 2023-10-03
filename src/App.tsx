@@ -1,5 +1,6 @@
 import Container from "@/components/mobx/Leo/Container.tsx";
 import AppContainer from "@/components/mobx/movie-rate/AppContainer.tsx";
+import SimpleState from "@/components/mobx/scratch/SimpleState.tsx";
 import StateKanbanBoard from "@/components/store/StateKanbanBoard.tsx";
 import { store } from "@/redux/store.ts";
 import { Provider } from "react-redux";
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
         <MovieApp />
       </AppContainer>
     ),
+  },
+  {
+    path: "/simple",
+    element: <SimpleState />,
   },
 ]);
 
