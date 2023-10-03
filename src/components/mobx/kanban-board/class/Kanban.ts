@@ -1,6 +1,6 @@
 import { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
 import { faker } from "@faker-js/faker";
-import { makeObservable, observable, action } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 import { v4 as uuidv4 } from "uuid";
 
 export type Todo = {
@@ -108,36 +108,35 @@ export class Kanban {
     );
     if (activeColumnIndex < 0 || overColumnIndex < 0) return;
 
-    this.columns = columnsCopy.splice(
+    columnsCopy.splice(
       overColumnIndex,
       0,
       columnsCopy.splice(activeColumnIndex, 1)[0],
     );
+    this.columns = columnsCopy;
   };
 
   onDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
     if (!over) return;
     if (active.id === over.id) return;
-    if (active.data.current?.type !== "Task") return;
+    if (active.data.current?.type !== "Todo") return;
 
-    if (over.data.current?.type === "Task") {
+    if (over.data.current?.type === "Todo") {
       const todosCopy = this.todos.slice();
       const sourceTodoIndex = todosCopy.findIndex(
         (todo) => todo.id === active.id,
       );
-      const sourceTodo = todosCopy[sourceTodoIndex];
       const destinationTodoIndex = todosCopy.findIndex(
         (todo) => todo.id === over.id,
       );
-      const destinationTodo = todosCopy[destinationTodoIndex];
       if (sourceTodoIndex < 0 || destinationTodoIndex < 0) return;
 
-      const sourceTodoModified = {
-        ...sourceTodo,
-        columnId: destinationTodo.columnId,
+      const sourceTodo = {
+        ...todosCopy.splice(sourceTodoIndex, 1)[0],
+        columnId: over.data.current.todo.columnId,
       };
-      todosCopy.splice(sourceTodoIndex, 1, sourceTodoModified);
+      todosCopy.splice(destinationTodoIndex, 0, sourceTodo);
       this.todos = todosCopy;
     }
 

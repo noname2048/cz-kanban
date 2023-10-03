@@ -26,7 +26,7 @@ const TodoView = observer(({ todo }: Props) => {
   } = useSortable({
     id: todo.id,
     data: {
-      type: "Task",
+      type: "Todo",
       todo,
     },
   });

@@ -8,7 +8,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./App.css";
 import KanbanBoard from "./components/origin/KanbanBoard.tsx";
-import MobxKanbanBoard from "@/components/mobx/kanban-board/components-dev/KanbanBoard.tsx";
+import MobxKanbanBoardDev from "@/components/mobx/kanban-board/components-dev/KanbanBoard.tsx";
+import MobxKanbanBoard from "@/components/mobx/kanban-board/components/KanbanBoard.tsx";
 import MovieApp from "@/components/mobx/movie-rate/screen/MovieApp";
 
 const router = createBrowserRouter([
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/mobx",
     element: <MobxKanbanBoard />,
+  },
+  {
+    path: "/mobx/dev",
+    element: <MobxKanbanBoardDev />,
   },
   {
     path: "/roster",
