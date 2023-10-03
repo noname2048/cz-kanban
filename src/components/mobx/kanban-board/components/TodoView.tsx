@@ -1,19 +1,17 @@
-import { useStoresContext } from "@/components/mobx/kanban-board/stores-context.ts";
-import { Todo } from "@/components/mobx/kanban-board/types.ts";
+import { useKanban } from "@/components/mobx/kanban-board/context/KanbanContext.ts";
 import TrashIcon from "@/icons/TrashIcon.tsx";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useState } from "react";
 import { observer } from "mobx-react";
+import { useState } from "react";
+import { Todo } from "@/components/mobx/kanban-board/class/Kanban.ts";
 
 type Props = {
   todo: Todo;
 };
 
-export const TodoCard = observer(({ todo }: Props) => {
-  const {
-    todoStore: { updateTodoContent, deleteTodo },
-  } = useStoresContext();
+const TodoView = observer(({ todo }: Props) => {
+  const kanban = useKanban();
 
   const [mouseIsOver, setMouseIsOver] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -71,7 +69,9 @@ export const TodoCard = observer(({ todo }: Props) => {
           onKeyDown={(e) => {
             if (e.key === "Enter" && e.shiftKey) toggleEditMode();
           }}
-          onChange={(e) => updateTodoContent(todo.id, e.target.value)}
+          onChange={(e) =>
+            kanban.updateTodo({ ...todo, content: e.target.value })
+          }
         />
       </div>
     );
@@ -98,7 +98,7 @@ export const TodoCard = observer(({ todo }: Props) => {
       {mouseIsOver && (
         <button
           onClick={() => {
-            deleteTodo(todo.id);
+            kanban.deleteTodo(todo);
           }}
           className="absolute right-4 top-1/2 -translate-y-1/2 rounded bg-secondary stroke-white p-2 opacity-60 hover:opacity-100"
         >
@@ -108,3 +108,5 @@ export const TodoCard = observer(({ todo }: Props) => {
     </div>
   );
 });
+
+export default TodoView;

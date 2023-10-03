@@ -1,41 +1,44 @@
-import { Stores } from "@/components/mobx/kanban-board/stores.ts";
-import { Column, Id, Todo } from "@/components/mobx/kanban-board/types.ts";
 import { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
 import { faker } from "@faker-js/faker";
-import { action, makeObservable, observable } from "mobx";
+import { makeObservable, observable, action } from "mobx";
 import { v4 as uuidv4 } from "uuid";
 
-export class TodoStore {
-  rootState: Stores;
-  columns: Column[] = [];
-  todos: Todo[] = [];
-  activeTodo: Todo | null = null;
-  activeColumn: Column | null = null;
+export type Todo = {
+  id: string;
+  columnId: string;
+  content: string;
+};
 
-  constructor(rootState: Stores, initialState?: TodoStore) {
-    this.rootState = rootState;
+export type Column = {
+  id: string;
+  title: string;
+};
 
-    if (initialState) {
-      this.columns = initialState.columns;
-      this.todos = initialState.todos;
-    }
+export class Kanban {
+  todos: Todo[];
+  columns: Column[];
+  activeTodo: Todo | null;
+  activeColumn: Column | null;
 
+  constructor() {
+    this.todos = [];
+    this.columns = [];
+    this.activeTodo = null;
+    this.activeColumn = null;
     makeObservable(this, {
-      // root
-      rootState: false,
-      // state
-      columns: observable,
       todos: observable,
+      columns: observable,
       activeTodo: observable,
       activeColumn: observable,
-      // actions
+
       createColumn: action,
+      updateColumn: action,
       deleteColumn: action,
-      updateColumnTitle: action,
+
       createTodo: action,
+      updateTodo: action,
       deleteTodo: action,
-      updateTodoContent: action,
-      // special actions
+
       onDragStart: action,
       onDragEnd: action,
       onDragOver: action,
@@ -48,47 +51,36 @@ export class TodoStore {
       title: faker.animal.cat(),
     });
   }
-
-  deleteColumn(columnId: Id) {
-    this.columns = this.columns.filter((column) => column.id !== columnId);
-  }
-
-  updateColumnTitle(columnId: Id, title: string) {
-    this.columns = this.columns.map((column) => {
-      if (column.id === columnId) {
-        return {
-          ...column,
-          title,
-        };
+  updateColumn(column: Column) {
+    this.columns = this.columns.map((c) => {
+      if (c.id === column.id) {
+        return column;
       }
-      return column;
+      return c;
     });
   }
+  deleteColumn(column: Column) {
+    this.columns = this.columns.filter((c) => c.id !== column.id);
+  }
 
-  createTodo = (columnId: Id) => {
-    const newId = uuidv4();
+  createTodo(columnId: string) {
     this.todos.push({
-      id: newId,
-      columnId,
-      content: [newId, faker.animal.cat()].join("\n"),
+      id: uuidv4(),
+      columnId: columnId,
+      content: faker.lorem.sentence(),
     });
-  };
-
-  deleteTodo = (todoId: Id) => {
-    this.todos = this.todos.filter((todo) => todo.id !== todoId);
-  };
-
-  updateTodoContent = (todoId: Id, content: string) => {
-    this.todos = this.todos.map((todo) => {
-      if (todo.id === todoId) {
-        return {
-          ...todo,
-          content,
-        };
+  }
+  updateTodo(todo: Todo) {
+    this.todos = this.todos.map((t) => {
+      if (t.id === todo.id) {
+        return todo;
       }
-      return todo;
+      return t;
     });
-  };
+  }
+  deleteTodo(todo: Todo) {
+    this.todos = this.todos.filter((t) => t.id !== todo.id);
+  }
 
   onDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === "Column") {
@@ -129,7 +121,6 @@ export class TodoStore {
     if (active.id === over.id) return;
     if (active.data.current?.type !== "Task") return;
 
-    // if todo is dragged over todo
     if (over.data.current?.type === "Task") {
       const todosCopy = this.todos.slice();
       const sourceTodoIndex = todosCopy.findIndex(
@@ -150,7 +141,6 @@ export class TodoStore {
       this.todos = todosCopy;
     }
 
-    // if todo is dragged over column
     if (over.data.current?.type === "Column") {
       const todosCopy = this.todos.slice();
       const sourceTodoIndex = todosCopy.findIndex(
