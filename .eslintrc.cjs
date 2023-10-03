@@ -15,6 +15,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    "mobx/missing-observer": "warn",
+    "mobx/missing-observer": ["off"],
+    "@typescript-eslint/no-unused-vars": ["warn"],
   },
 }
