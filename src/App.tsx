@@ -1,16 +1,17 @@
+import { Provider } from "react-redux";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
 import Container from "@/components/mobx/Leo/Container.tsx";
+import MobxKanbanBoardDev from "@/components/mobx/kanban-board/components-dev/KanbanBoard.tsx";
+import MobxKanbanBoard from "@/components/mobx/kanban-board/components/KanbanBoard.tsx";
 import AppContainer from "@/components/mobx/movie-rate/AppContainer.tsx";
+import MovieApp from "@/components/mobx/movie-rate/screen/MovieApp";
 import SimpleState from "@/components/mobx/scratch/SimpleState.tsx";
 import StateKanbanBoard from "@/components/store/StateKanbanBoard.tsx";
 import { store } from "@/redux/store.ts";
-import { Provider } from "react-redux";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./App.css";
 import KanbanBoard from "./components/origin/KanbanBoard.tsx";
-import MobxKanbanBoardDev from "@/components/mobx/kanban-board/components-dev/KanbanBoard.tsx";
-import MobxKanbanBoard from "@/components/mobx/kanban-board/components/KanbanBoard.tsx";
-import MovieApp from "@/components/mobx/movie-rate/screen/MovieApp";
 
 const router = createBrowserRouter([
   {
