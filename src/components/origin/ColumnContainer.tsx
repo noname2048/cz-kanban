@@ -1,10 +1,11 @@
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { useMemo, useState } from "react";
+
 import TaskCard from "@/components/origin/TaskCard.tsx";
 import PlusIcon from "@/icons/PlusIcon.tsx";
 import TrashIcon from "@/icons/TrashIcon.tsx";
 import { Column, Id, Task } from "@/types.ts";
-import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { useMemo, useState } from "react";
 
 interface Props {
   column: Column;
@@ -80,7 +81,7 @@ function ColumnContainer(props: Props) {
       >
         <div className="flex gap-2">
           <div className="flex items-center justify-center rounded-full bg-secondary px-2 py-1 text-sm">
-            0
+            {tasks.length}
           </div>
           {!editMode && column.title}
           {editMode && (

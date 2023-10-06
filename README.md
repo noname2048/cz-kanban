@@ -1,27 +1,21 @@
-# React + TypeScript + Vite
+# cz-kanban
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+@dnd-kit, redux, mobx 를 이용한 kanban board
 
-Currently, two official plugins are available:
+![img.png](docs/img.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 지원되는 기능
 
-## Expanding the ESLint configuration
+- 저장과 불러오기 기능 (localStorage)
+- column 제목, task 제목 변경과 삭제
+- column 간 순서 변경, task 간 순서 변경
+- redux, mobx 를 이용한 상태관리 (각각)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 디자인 출처
 
-- Configure the top-level `parserOptions` property like this:
+[YOUTUBE](https://www.youtube.com/watch?v=RG-3R6Pu_Ik)
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+## 개선시킨점
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- 복잡한 상태를 redux, mobx 로 각각 줄여보기
+- save, load 기능 개발하기
